@@ -5,6 +5,7 @@
 ```shell
 # pip install -r requirements.txt (optional)
 python benchmark.py
+python inference_benchmark.py
 ```
 
 ### Performance Benchmark in Single V100-32GB
@@ -28,6 +29,8 @@ python benchmark.py
 + `GPU` Tesla V100-PCIE-32GB
 
 #### Performance Benchmark Result
+
+##### Attention
 
 ```shell
 Baseline (cpu) (torch.float32)
@@ -173,4 +176,62 @@ Triton FP16 (torch.float16)
   SeqLen=2048   Speed= 28352426.29 tokens/s  TFLOPS= 118.92
   SeqLen=4096   Speed= 33897378.13 tokens/s  TFLOPS= 284.35
   SeqLen=8192   Speed= 37336178.52 tokens/s  TFLOPS= 626.40
+```
+
+##### GPT-3 Inference
+
+```shell
+Benchmarking GPT-3 structure with different attention implementations
+
+===== FP32 Benchmark =====
+
+--- Sequence Length: 256 ---
+Baseline (cpu) FP32 (seq_len=256): 6845.46 tokens/s, 37.40 ms/iter
+Baseline (gpu) FP32 (seq_len=256): 30903.49 tokens/s, 8.28 ms/iter
+cuBLAS FP32 (seq_len=256): 31545.71 tokens/s, 8.12 ms/iter
+Torch SDPA FP32 (seq_len=256): 32403.11 tokens/s, 7.90 ms/iter
+XFormers FP32 (seq_len=256): 33399.07 tokens/s, 7.66 ms/iter
+Triton FP32 (seq_len=256): 31324.93 tokens/s, 8.17 ms/iter
+
+--- Sequence Length: 1024 ---
+Baseline (cpu) FP32 (seq_len=1024): 3552.13 tokens/s, 288.28 ms/iter
+Baseline (gpu) FP32 (seq_len=1024): 33104.71 tokens/s, 30.93 ms/iter
+cuBLAS FP32 (seq_len=1024): 32940.25 tokens/s, 31.09 ms/iter
+Torch SDPA FP32 (seq_len=1024): 35867.15 tokens/s, 28.55 ms/iter
+XFormers FP32 (seq_len=1024): 40858.09 tokens/s, 25.06 ms/iter
+Triton FP32 (seq_len=1024): 40541.93 tokens/s, 25.26 ms/iter
+
+--- Sequence Length: 4096 ---
+Baseline (cpu) FP32 (seq_len=4096): 1318.10 tokens/s, 3107.51 ms/iter
+Baseline (gpu) FP32 (seq_len=4096): 21314.98 tokens/s, 192.17 ms/iter
+cuBLAS FP32 (seq_len=4096): 21294.51 tokens/s, 192.35 ms/iter
+Torch SDPA FP32 (seq_len=4096): 25224.53 tokens/s, 162.38 ms/iter
+XFormers FP32 (seq_len=4096): 45008.93 tokens/s, 91.00 ms/iter
+Triton FP32 (seq_len=4096): 45482.47 tokens/s, 90.06 ms/iter
+
+===== FP16 Benchmark =====
+
+--- Sequence Length: 256 ---
+Baseline (cpu) FP16 (seq_len=256): 7206.47 tokens/s, 35.52 ms/iter
+Baseline (gpu) FP16 (seq_len=256): 79759.76 tokens/s, 3.21 ms/iter
+cuBLAS FP16 (seq_len=256): 54782.61 tokens/s, 4.67 ms/iter
+Torch SDPA FP16 (seq_len=256): 79432.29 tokens/s, 3.22 ms/iter
+XFormers FP16 (seq_len=256): 82186.80 tokens/s, 3.11 ms/iter
+Triton FP16 (seq_len=256): 75712.66 tokens/s, 3.38 ms/iter
+
+--- Sequence Length: 1024 ---
+Baseline (cpu) FP16 (seq_len=1024): 7686.79 tokens/s, 133.22 ms/iter
+Baseline (gpu) FP16 (seq_len=1024): 99776.57 tokens/s, 10.26 ms/iter
+cuBLAS FP16 (seq_len=1024): 77336.01 tokens/s, 13.24 ms/iter
+Torch SDPA FP16 (seq_len=1024): 121304.83 tokens/s, 8.44 ms/iter
+XFormers FP16 (seq_len=1024): 139249.42 tokens/s, 7.35 ms/iter
+Triton FP16 (seq_len=1024): 132013.92 tokens/s, 7.76 ms/iter
+
+--- Sequence Length: 4096 ---
+Baseline (cpu) FP16 (seq_len=4096): 1965.43 tokens/s, 2084.03 ms/iter
+Baseline (gpu) FP16 (seq_len=4096): 57713.83 tokens/s, 70.97 ms/iter
+cuBLAS FP16 (seq_len=4096): 34398.90 tokens/s, 119.07 ms/iter
+Torch SDPA FP16 (seq_len=4096): 89211.34 tokens/s, 45.91 ms/iter
+XFormers FP16 (seq_len=4096): 170953.33 tokens/s, 23.96 ms/iter
+Triton FP16 (seq_len=4096): 170263.17 tokens/s, 24.06 ms/iter
 ```
