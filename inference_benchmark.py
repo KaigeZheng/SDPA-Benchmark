@@ -98,14 +98,19 @@ if __name__ == "__main__":
         (xformers_attention, "XFormers", device),
         (triton_attention, "Triton", device),
     ]
+    seq_lens = [256, 1024, 4096]
     # FP32
     print("\n===== FP32 Benchmark =====")
-    for attn_fn, name, attn_device in attn_list:
-        dtype = torch.float32
-        benchmark_gpt3(attn_fn, name + " FP32", device=attn_device, dtype=dtype)
+    for seq_len in seq_lens:
+        print(f"\n--- Sequence Length: {seq_len} ---")
+        for attn_fn, name, attn_device in attn_list:
+            dtype = torch.float32
+            benchmark_gpt3(attn_fn, f"{name} FP32 (seq_len={seq_len})", seq_len=seq_len, device=attn_device, dtype=dtype)
     # FP16
     if device == 'cuda':
         print("\n===== FP16 Benchmark =====")
-        for attn_fn, name, attn_device in attn_list:
-            dtype = torch.float16
-            benchmark_gpt3(attn_fn, name + " FP16", device=attn_device, dtype=dtype)
+        for seq_len in seq_lens:
+            print(f"\n--- Sequence Length: {seq_len} ---")
+            for attn_fn, name, attn_device in attn_list:
+                dtype = torch.float16
+                benchmark_gpt3(attn_fn, f"{name} FP16 (seq_len={seq_len})", seq_len=seq_len, device=attn_device, dtype=dtype)
