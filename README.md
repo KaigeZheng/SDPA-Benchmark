@@ -1,5 +1,7 @@
 ## Performance Benchmarking of Attention Operators
 
+![Attention Kernel Performance (FP16)](imgs/attention_kernel/tflops_fp16.png)
+
 ### Quick Start
 
 ```shell
